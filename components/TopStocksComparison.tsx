@@ -2,12 +2,14 @@
 
 import { Stock } from '@/lib/types';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface TopStocksComparisonProps {
   stocks: Stock[];
 }
 
 export default function TopStocksComparison({ stocks }: TopStocksComparisonProps) {
+  const router = useRouter();
   const [hoveredStock, setHoveredStock] = useState<string | null>(null);
 
   // TOP 3만 가져오기
@@ -60,10 +62,7 @@ export default function TopStocksComparison({ stocks }: TopStocksComparisonProps
             `}
             onMouseEnter={() => setHoveredStock(stock.symbol)}
             onMouseLeave={() => setHoveredStock(null)}
-            onClick={() => {
-              // 클릭 시 상세 페이지로 이동 (향후 구현)
-              console.log(`Navigate to ${stock.symbol} detail page`);
-            }}
+            onClick={() => router.push(`/stock/${stock.symbol}`)}
           >
             {/* 순위 뱃지 */}
             <div className="flex items-center justify-between mb-4">
