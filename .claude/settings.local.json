@@ -13,7 +13,36 @@
       "Bash(git add:*)",
       "Bash(ls:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: TOP 3 종목 비교 섹션 클릭 기능 추가\n\n- TopStocksComparison 컴포넌트에 useRouter 추가\n- 클릭 시 종목 상세 페이지로 이동하도록 수정\n- 사용자 경험 개선: 전체 카드 영역 클릭 가능\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npx:*)",
+      "Bash(where:*)",
+      "Bash(dir \"%APPDATA%\\\\Claude\")",
+      "Bash(dir \"%USERPROFILE%\\\\.claude\")",
+      "WebFetch(domain:server.smithery.ai)",
+      "WebFetch(domain:smithery.ai)",
+      "Bash(claude mcp add:*)",
+      "WebFetch(domain:mcp.exa.ai)",
+      "Bash(pip install:*)",
+      "Bash(python -m pip install:*)",
+      "Bash(python main.py:*)",
+      "Bash(timeout /t 3 /nobreak)",
+      "Bash(python -m uvicorn:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(python:*)",
+      "Bash(taskkill:*)",
+      "WebFetch(domain:www.tradingview.com)",
+      "Bash(npm run lint:*)",
+      "Bash(netstat:*)",
+      "Bash(cmd /c \"taskkill /F /PID 24984 & taskkill /F /PID 21096 & taskkill /F /PID 11864 & taskkill /F /PID 21592 & taskkill /F /PID 22700\")",
+      "Bash(powershell -Command \"Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force\")",
+      "Bash(git rm:*)",
+      "Bash(del nul)",
+      "Bash(git restore:*)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "context7",
+    "exa"
+  ]
 }

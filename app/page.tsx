@@ -1,125 +1,163 @@
 'use client';
 
+import { Calendar, TrendingUp, Star, Trophy, Activity, BarChart3, Info } from 'lucide-react';
 import StockCard from '@/components/StockCard';
 import BriefingCard from '@/components/BriefingCard';
 import StockChart from '@/components/StockChart';
 import TopStocksComparison from '@/components/TopStocksComparison';
 import StockSearch from '@/components/StockSearch';
 import Watchlist from '@/components/Watchlist';
+import TrendingStocks from '@/components/TrendingStocks';
 import { mockTopStock, mockTrendingStocks, mockBriefings, mockNVDAChartData } from '@/data/mockData';
 
 export default function Home() {
+  const currentDate = new Date().toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+  });
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b tv-border">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-900 dark:text-white mb-2">
-            오늘의 대시보드
-          </h2>
-          <p className="text-gray-600 dark:text-gray-600 dark:text-gray-400">
-            {new Date().toLocaleDateString('ko-KR', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              weekday: 'long',
-            })}
-          </p>
+          <h1 className="text-2xl font-semibold tv-text-primary mb-1">
+            Dashboard
+          </h1>
+          <div className="flex items-center gap-2 tv-text-tertiary">
+            <Calendar className="w-4 h-4" />
+            <span className="text-sm">{currentDate}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="tv-badge tv-badge-live">
+            <span className="w-1.5 h-1.5 rounded-full bg-current" />
+            LIVE DATA
+          </div>
         </div>
       </div>
 
       {/* Watchlist Section */}
-      <section>
-        <div className="mb-4">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-900 dark:text-white mb-4">
-            ⭐ 관심종목
-          </h3>
+      <section className="tv-card overflow-hidden">
+        <div className="p-4 border-b tv-border flex items-center justify-between">
+          <div className="tv-section-title">
+            <Star className="w-4 h-4 tv-text-warning" />
+            <span>Watchlist</span>
+          </div>
           <StockSearch />
         </div>
-        <Watchlist />
+        <div className="p-4">
+          <Watchlist />
+        </div>
       </section>
 
-      {/* Featured Stock Section */}
+      {/* Featured Stock + Chart */}
       <section>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-            🔥 오늘의 화제 종목
-          </h3>
-          <span className="text-sm text-gray-600 dark:text-gray-400">
-            복합 점수 기준 Top 1
-          </span>
+        <div className="tv-section-header">
+          <div>
+            <div className="tv-section-title">
+              <TrendingUp className="w-4 h-4 tv-text-positive" />
+              <span>Featured Stock</span>
+            </div>
+            <p className="tv-section-subtitle">Top pick by composite score</p>
+          </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <StockCard stock={mockTopStock} featured={true} />
-          <div className="bg-dark-card border border-dark-border rounded-lg p-6">
-            <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-              📈 {mockTopStock.symbol} 주가 차트
-            </h4>
-            <StockChart data={mockNVDAChartData} symbol={mockTopStock.symbol} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          {/* Featured Stock Card */}
+          <div className="lg:col-span-2">
+            <StockCard stock={mockTopStock} featured={true} />
+          </div>
+
+          {/* Chart */}
+          <div className="lg:col-span-3 tv-card p-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium tv-text-primary">{mockTopStock.symbol}</span>
+                <span className="text-xs tv-text-muted">5D</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="tv-btn tv-btn-ghost text-xs py-1 px-2">1D</button>
+                <button className="tv-btn tv-btn-secondary text-xs py-1 px-2">5D</button>
+                <button className="tv-btn tv-btn-ghost text-xs py-1 px-2">1M</button>
+                <button className="tv-btn tv-btn-ghost text-xs py-1 px-2">3M</button>
+              </div>
+            </div>
+            <div className="h-[280px]">
+              <StockChart data={mockNVDAChartData} symbol={mockTopStock.symbol} />
+            </div>
           </div>
         </div>
       </section>
 
       {/* TOP 3 Comparison */}
       <section>
-        <div className="flex items-center justify-between mb-4">
+        <div className="tv-section-header">
           <div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
-              🏆 TOP 3 종목 비교
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              클릭하여 상세 정보 확인
-            </p>
+            <div className="tv-section-title">
+              <Trophy className="w-4 h-4 tv-text-warning" />
+              <span>Top 3 Rankings</span>
+            </div>
+            <p className="tv-section-subtitle">Click to view details</p>
           </div>
-          <span className="text-sm text-gray-600 dark:text-gray-400">
-            복합 점수 순위
-          </span>
+          <span className="text-xs tv-text-muted">Ranked by composite score</span>
         </div>
         <TopStocksComparison stocks={mockTrendingStocks} />
       </section>
 
-      {/* Trending Stocks Grid */}
+      {/* Trending Stocks Grid - Real API */}
       <section>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-            📈 화제 종목 순위
-          </h3>
-          <button className="text-sm text-stock-up hover:text-stock-up/80 transition-colors">
-            전체 보기 →
-          </button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {mockTrendingStocks.map((stock) => (
-            <StockCard key={stock.symbol} stock={stock} />
-          ))}
-        </div>
+        <TrendingStocks />
       </section>
 
       {/* Selection Criteria */}
-      <section className="bg-dark-card border border-dark-border rounded-lg p-6">
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-          📊 종목 선정 기준
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 bg-dark-bg rounded">
-            <div className="text-2xl mb-2">📊</div>
-            <h4 className="text-gray-900 dark:text-white font-semibold mb-1">거래량 점수</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              평균 거래량 대비 당일 거래량 비율
+      <section className="tv-card overflow-hidden">
+        <div className="p-4 border-b tv-border">
+          <div className="tv-section-title">
+            <Info className="w-4 h-4 tv-text-accent" />
+            <span>Selection Criteria</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x tv-border">
+          <div className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg tv-bg-secondary flex items-center justify-center">
+                <Activity className="w-5 h-5 tv-text-positive" />
+              </div>
+              <div>
+                <h4 className="text-sm font-medium tv-text-primary">Volume Score</h4>
+              </div>
+            </div>
+            <p className="text-xs tv-text-tertiary leading-relaxed">
+              Daily trading volume compared to average volume ratio
             </p>
           </div>
-          <div className="p-4 bg-dark-bg rounded">
-            <div className="text-2xl mb-2">📈</div>
-            <h4 className="text-gray-900 dark:text-white font-semibold mb-1">변동률 점수</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              당일 주가 변동폭 및 방향성
+          <div className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg tv-bg-secondary flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 tv-text-positive" />
+              </div>
+              <div>
+                <h4 className="text-sm font-medium tv-text-primary">Change Score</h4>
+              </div>
+            </div>
+            <p className="text-xs tv-text-tertiary leading-relaxed">
+              Daily price change rate and directional movement
             </p>
           </div>
-          <div className="p-4 bg-dark-bg rounded">
-            <div className="text-2xl mb-2">⭐</div>
-            <h4 className="text-gray-900 dark:text-white font-semibold mb-1">출현 보너스</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              여러 스크리너 목록 동시 등장 시 가산점
+          <div className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg tv-bg-secondary flex items-center justify-center">
+                <Star className="w-5 h-5 tv-text-warning" />
+              </div>
+              <div>
+                <h4 className="text-sm font-medium tv-text-primary">Appearance Bonus</h4>
+              </div>
+            </div>
+            <p className="text-xs tv-text-tertiary leading-relaxed">
+              Extra points for appearing in multiple screener lists
             </p>
           </div>
         </div>
@@ -127,12 +165,16 @@ export default function Home() {
 
       {/* Recent Briefings */}
       <section>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-            📋 최근 브리핑 히스토리
-          </h3>
-          <button className="text-sm text-stock-up hover:text-stock-up/80 transition-colors">
-            전체 히스토리 →
+        <div className="tv-section-header">
+          <div>
+            <div className="tv-section-title">
+              <BarChart3 className="w-4 h-4 tv-text-accent" />
+              <span>Recent Briefings</span>
+            </div>
+            <p className="tv-section-subtitle">Historical market analysis</p>
+          </div>
+          <button className="tv-btn tv-btn-ghost text-xs">
+            View All
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

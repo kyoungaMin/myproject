@@ -1,6 +1,7 @@
 'use client';
 
 import { useTheme } from '@/lib/ThemeProvider';
+import { Sun, Moon, Monitor } from 'lucide-react';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
@@ -8,19 +9,26 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="relative w-14 h-7 bg-dark-border dark:bg-dark-card rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-stock-up focus:ring-offset-2 focus:ring-offset-dark-bg"
-      aria-label="테마 전환"
+      className="tv-btn tv-btn-ghost p-2 relative"
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
-      <div
-        className={`absolute top-1 left-1 w-5 h-5 bg-white dark:bg-dark-bg rounded-full transition-transform duration-300 flex items-center justify-center ${
-          theme === 'dark' ? 'translate-x-7' : 'translate-x-0'
-        }`}
-      >
-        {theme === 'dark' ? (
-          <span className="text-xs">🌙</span>
-        ) : (
-          <span className="text-xs">☀️</span>
-        )}
+      <div className="relative w-4 h-4">
+        {/* Sun icon for light mode */}
+        <Sun
+          className={`w-4 h-4 absolute inset-0 transition-all duration-200 ${
+            theme === 'dark'
+              ? 'opacity-0 rotate-90 scale-0'
+              : 'opacity-100 rotate-0 scale-100'
+          }`}
+        />
+        {/* Moon icon for dark mode */}
+        <Moon
+          className={`w-4 h-4 absolute inset-0 transition-all duration-200 ${
+            theme === 'dark'
+              ? 'opacity-100 rotate-0 scale-100'
+              : 'opacity-0 -rotate-90 scale-0'
+          }`}
+        />
       </div>
     </button>
   );

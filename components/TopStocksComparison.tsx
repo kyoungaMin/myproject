@@ -3,6 +3,7 @@
 import { Stock } from '@/lib/types';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { TrendingUp, TrendingDown, Activity, BarChart3, Building2, ChevronRight } from 'lucide-react';
 
 interface TopStocksComparisonProps {
   stocks: Stock[];
@@ -12,175 +13,204 @@ export default function TopStocksComparison({ stocks }: TopStocksComparisonProps
   const router = useRouter();
   const [hoveredStock, setHoveredStock] = useState<string | null>(null);
 
-  // TOP 3만 가져오기
   const top3Stocks = stocks.slice(0, 3);
 
-  // 순위별 뱃지 색상
-  const getRankBadgeColor = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white';
-      case 2:
-        return 'bg-gradient-to-r from-gray-400 to-gray-500 text-white';
-      case 3:
-        return 'bg-gradient-to-r from-orange-600 to-orange-700 text-white';
-      default:
-        return 'bg-gray-700 text-white';
-    }
+  const formatVolume = (volume: number) => {
+    if (volume >= 1000000000) return `${(volume / 1000000000).toFixed(1)}B`;
+    if (volume >= 1000000) return `${(volume / 1000000).toFixed(1)}M`;
+    if (volume >= 1000) return `${(volume / 1000).toFixed(1)}K`;
+    return volume.toString();
   };
 
-  // 순위별 테두리 색상
-  const getRankBorderColor = (rank: number) => {
+  const formatMarketCap = (cap: number) => {
+    if (cap >= 1000000000000) return `$${(cap / 1000000000000).toFixed(2)}T`;
+    if (cap >= 1000000000) return `$${(cap / 1000000000).toFixed(1)}B`;
+    if (cap >= 1000000) return `$${(cap / 1000000).toFixed(1)}M`;
+    return `$${cap.toLocaleString()}`;
+  };
+
+  const getRankStyle = (rank: number) => {
     switch (rank) {
       case 1:
-        return 'border-yellow-500/50 hover:border-yellow-500';
+        return {
+          badge: 'tv-rank-1',
+          border: 'border-l-4 border-l-yellow-500',
+          glow: 'shadow-yellow-500/10',
+        };
       case 2:
-        return 'border-gray-400/50 hover:border-gray-400';
+        return {
+          badge: 'tv-rank-2',
+          border: 'border-l-4 border-l-gray-400',
+          glow: 'shadow-gray-400/10',
+        };
       case 3:
-        return 'border-orange-600/50 hover:border-orange-600';
+        return {
+          badge: 'tv-rank-3',
+          border: 'border-l-4 border-l-orange-600',
+          glow: 'shadow-orange-500/10',
+        };
       default:
-        return 'border-dark-border hover:border-stock-up/50';
+        return {
+          badge: 'tv-badge-neutral',
+          border: 'border-l-4 border-l-gray-500',
+          glow: '',
+        };
     }
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {top3Stocks.map((stock) => {
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {top3Stocks.map((stock, index) => {
         const isPositive = stock.change_percent >= 0;
-        const changeColor = isPositive ? 'text-stock-up' : 'text-stock-down';
         const isHovered = hoveredStock === stock.symbol;
+        const rankStyle = getRankStyle(stock.rank);
+        const TrendIcon = isPositive ? TrendingUp : TrendingDown;
 
         return (
           <div
             key={stock.symbol}
             className={`
-              bg-dark-card border-2 rounded-lg p-6
-              transition-all duration-300 cursor-pointer
-              transform hover:scale-105 hover:shadow-xl
-              ${getRankBorderColor(stock.rank)}
-              ${isHovered ? 'shadow-2xl' : ''}
+              tv-card tv-card-interactive overflow-hidden cursor-pointer
+              ${rankStyle.border}
+              ${isHovered ? `shadow-tv-lg ${rankStyle.glow}` : ''}
+              transition-all duration-200
+              animate-slide-up
             `}
+            style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'both' }}
             onMouseEnter={() => setHoveredStock(stock.symbol)}
             onMouseLeave={() => setHoveredStock(null)}
             onClick={() => router.push(`/stock/${stock.symbol}`)}
           >
-            {/* 순위 뱃지 */}
-            <div className="flex items-center justify-between mb-4">
-              <div className={`
-                px-4 py-2 rounded-full font-bold text-lg
-                ${getRankBadgeColor(stock.rank)}
-                shadow-lg
-              `}>
-                #{stock.rank}
-              </div>
-              <div className="flex items-center gap-2">
-                {stock.sources.map((source, idx) => (
-                  <span
-                    key={idx}
-                    className="text-xs bg-dark-bg px-2 py-1 rounded text-gray-400"
-                  >
-                    {source === 'most_actives' ? '🔥' : source === 'day_gainers' ? '📈' : '📉'}
-                  </span>
-                ))}
+            {/* Header */}
+            <div className="p-4 border-b tv-border-secondary">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  {/* Rank Badge */}
+                  <div className={`
+                    w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold
+                    ${rankStyle.badge}
+                  `}>
+                    {stock.rank}
+                  </div>
+                  <div>
+                    <span className="text-lg font-semibold tv-text-primary block">
+                      {stock.symbol}
+                    </span>
+                    <span className="text-xs tv-text-muted truncate max-w-[120px] block">
+                      {stock.name}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Source Indicators */}
+                <div className="flex gap-1">
+                  {stock.sources.slice(0, 2).map((source, idx) => (
+                    <span
+                      key={idx}
+                      className="tv-badge tv-badge-neutral text-[10px]"
+                      title={source}
+                    >
+                      {source === 'most_actives' && 'Active'}
+                      {source === 'day_gainers' && 'Gainer'}
+                      {source === 'day_losers' && 'Loser'}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* 종목 정보 */}
-            <div className="text-center mb-4">
-              <h3 className="text-3xl font-bold text-white mb-1">
-                {stock.symbol}
-              </h3>
-              <p className="text-sm text-gray-400 mb-3">{stock.name}</p>
-
-              {/* 주가 */}
-              <div className="mb-3">
-                <p className="text-sm text-gray-500 mb-1">현재가</p>
-                <p className="text-4xl font-bold text-white">
+            {/* Price Section */}
+            <div className="p-4">
+              <div className="text-center mb-4">
+                <span className="tv-price tv-price-xl tv-text-primary block mb-2">
                   ${stock.price.toFixed(2)}
-                </p>
-              </div>
-
-              {/* 변동률 */}
-              <div className={`
-                text-2xl font-bold mb-3 ${changeColor}
-                flex items-center justify-center gap-2
-              `}>
-                <span>{isPositive ? '▲' : '▼'}</span>
-                <span>{isPositive ? '+' : ''}{stock.change_percent.toFixed(2)}%</span>
-              </div>
-            </div>
-
-            {/* 비교 지표 */}
-            <div className="space-y-3 pt-4 border-t border-dark-border">
-              {/* 거래량 */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">거래량</span>
-                <span className="text-sm font-semibold text-white">
-                  {(stock.volume / 1000000).toFixed(1)}M
                 </span>
-              </div>
-
-              {/* 시가총액 */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">시가총액</span>
-                <span className="text-sm font-semibold text-white">
-                  ${(stock.market_cap / 1000000000).toFixed(1)}B
-                </span>
-              </div>
-
-              {/* 복합 점수 */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">복합 점수</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-20 h-2 bg-dark-bg rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-stock-up rounded-full transition-all duration-500"
-                      style={{ width: `${stock.composite_score}%` }}
-                    />
-                  </div>
-                  <span className="text-sm font-bold text-stock-up">
-                    {stock.composite_score.toFixed(1)}
+                <div className={`
+                  inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md
+                  ${isPositive ? 'tv-bg-positive' : 'tv-bg-negative'}
+                `}>
+                  <TrendIcon className={`w-4 h-4 ${isPositive ? 'tv-text-positive' : 'tv-text-negative'}`} />
+                  <span className={`tv-change font-semibold ${isPositive ? 'tv-text-positive' : 'tv-text-negative'}`}>
+                    {isPositive ? '+' : ''}{stock.change_percent.toFixed(2)}%
                   </span>
                 </div>
               </div>
 
-              {/* 섹터 */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">섹터</span>
-                <span className="text-sm font-semibold text-white">
-                  {stock.sector}
-                </span>
-              </div>
-            </div>
+              {/* Stats */}
+              <div className="space-y-2.5">
+                <div className="tv-data-row">
+                  <span className="tv-data-label flex items-center gap-1.5">
+                    <Activity className="w-3 h-3" />
+                    Volume
+                  </span>
+                  <span className="tv-data-value">{formatVolume(stock.volume)}</span>
+                </div>
 
-            {/* 호버 시 추가 정보 */}
-            {isHovered && (
-              <div className="mt-4 pt-4 border-t border-dark-border animate-fade-in">
-                <div className="text-xs text-gray-400 space-y-1">
-                  <div className="flex justify-between">
-                    <span>거래량 점수:</span>
-                    <span className="text-white font-semibold">
-                      {stock.score_breakdown.volume_score.toFixed(1)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>변동률 점수:</span>
-                    <span className="text-white font-semibold">
-                      {stock.score_breakdown.change_score.toFixed(1)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>보너스 점수:</span>
-                    <span className="text-white font-semibold">
-                      +{stock.score_breakdown.appearance_bonus.toFixed(1)}
+                <div className="tv-data-row">
+                  <span className="tv-data-label flex items-center gap-1.5">
+                    <BarChart3 className="w-3 h-3" />
+                    Market Cap
+                  </span>
+                  <span className="tv-data-value">{formatMarketCap(stock.market_cap)}</span>
+                </div>
+
+                <div className="tv-data-row">
+                  <span className="tv-data-label flex items-center gap-1.5">
+                    <Building2 className="w-3 h-3" />
+                    Sector
+                  </span>
+                  <span className="text-xs font-medium tv-text-primary">{stock.sector}</span>
+                </div>
+
+                {/* Composite Score */}
+                <div className="tv-data-row border-none">
+                  <span className="tv-data-label">Score</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-20 h-1.5 rounded-full tv-bg-tertiary overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-tv-positive transition-all duration-700"
+                        style={{ width: `${Math.min(stock.composite_score, 100)}%` }}
+                      />
+                    </div>
+                    <span className="tv-data-value tv-text-positive">
+                      {stock.composite_score.toFixed(0)}
                     </span>
                   </div>
                 </div>
-                <button className="w-full mt-3 bg-stock-up hover:bg-stock-up/80 text-white py-2 rounded-lg text-sm font-semibold transition-colors">
-                  상세 보기 →
-                </button>
               </div>
-            )}
+            </div>
+
+            {/* Hover Detail */}
+            <div className={`
+              px-4 pb-4 pt-0 transition-all duration-200
+              ${isHovered ? 'opacity-100 max-h-40' : 'opacity-0 max-h-0 overflow-hidden'}
+            `}>
+              <div className="pt-3 border-t tv-border space-y-2">
+                <div className="flex justify-between text-xs">
+                  <span className="tv-text-muted">Volume Score</span>
+                  <span className="tv-text-primary font-medium">
+                    {stock.score_breakdown.volume_score.toFixed(1)}
+                  </span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="tv-text-muted">Change Score</span>
+                  <span className="tv-text-primary font-medium">
+                    {stock.score_breakdown.change_score.toFixed(1)}
+                  </span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="tv-text-muted">Bonus</span>
+                  <span className="tv-text-positive font-medium">
+                    +{stock.score_breakdown.appearance_bonus.toFixed(1)}
+                  </span>
+                </div>
+              </div>
+
+              <button className="tv-btn tv-btn-primary w-full mt-3 text-xs">
+                View Details
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         );
       })}
