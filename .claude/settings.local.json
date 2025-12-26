@@ -10,7 +10,10 @@
       "Bash(curl:*)",
       "Bash(ping:*)",
       "Bash(findstr:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(ls:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: TOP 3 종목 비교 섹션 클릭 기능 추가\n\n- TopStocksComparison 컴포넌트에 useRouter 추가\n- 클릭 시 종목 상세 페이지로 이동하도록 수정\n- 사용자 경험 개선: 전체 카드 영역 클릭 가능\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)"
     ]
   }
 }
