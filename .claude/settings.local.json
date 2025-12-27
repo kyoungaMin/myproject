@@ -38,11 +38,19 @@
       "Bash(powershell -Command \"Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force\")",
       "Bash(git rm:*)",
       "Bash(del nul)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "WebSearch",
+      "WebFetch(domain:www.remote-mcp.com)",
+      "Bash(node generate-briefing-card.js:*)",
+      "Bash(if not exist \"C:\\\\myproject\\\\output\\\\reports\" mkdir \"C:\\\\myproject\\\\output\\\\reports\")",
+      "Bash(dir \"C:\\\\myproject\\\\output\\\\reports\\\\briefing_2025-12-27.docx\")",
+      "Bash(if not exist \"C:\\\\myproject\\\\output\\\\data\" mkdir \"C:\\\\myproject\\\\output\\\\data\")"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "context7",
-    "exa"
+    "exa",
+    "canva"
   ]
 }

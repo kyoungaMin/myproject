@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>당신이 잠든 사이 - Briefing Card</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .briefing-card {
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #2a2a3e;
+            border-radius: 24px;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .briefing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff88 0%, #00cc70 100%);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .logo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .title {
+            font-size: 42px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #8899aa;
+            font-weight: 400;
+        }
+
+        .date {
+            font-size: 28px;
+            color: #8899aa;
+            font-weight: 600;
+            background: rgba(136, 153, 170, 0.1);
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(136, 153, 170, 0.2);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .stock-label {
+            font-size: 16px;
+            color: #8899aa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .stock-name {
+            font-size: 72px;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        .stock-ticker {
+            font-size: 36px;
+            color: #6688aa;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .change-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .change-value {
+            font-size: 64px;
+            font-weight: 900;
+            color: #00ff88;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .change-indicator {
+            width: 0;
+            height: 0;
+            border-left: 24px solid transparent;
+            border-right: 24px solid transparent;
+            border-bottom: 36px solid #00ff88;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.4));
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .info-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #6688aa;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 24px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .news-highlight {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 204, 112, 0.05) 100%);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            padding: 20px 25px;
+            border-radius: 12px;
+        }
+
+        .news-value {
+            color: #00ff88;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: #556677;
+            font-style: italic;
+        }
+
+        .branding {
+            font-size: 16px;
+            color: #8899aa;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .branding::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+        }
+
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="briefing-card">
+        <div class="grid-pattern"></div>
+
+        <div class="header">
+            <div class="logo-section">
+                <div class="title">당신이 잠든 사이</div>
+                <div class="subtitle">While You Were Sleeping</div>
+            </div>
+            <div class="date">2025.12.05</div>
+        </div>
+
+        <div class="main-content">
+            <div class="stock-label">Today's Hot Stock</div>
+            <div class="stock-name">TESLA</div>
+            <div class="stock-ticker">TSLA</div>
+
+            <div class="change-section">
+                <div class="change-indicator"></div>
+                <div class="change-value">+8.7%</div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Selection Criteria</div>
+                    <div class="info-value">거래량 1위</div>
+                </div>
+                <div class="info-item news-highlight">
+                    <div class="info-label">Key News</div>
+                    <div class="info-value news-value">사이버트럭 판매량 급증</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="tagline">AI-Powered Investment Intelligence</div>
+            <div class="branding">MARKET BRIEFING</div>
+        </div>
+    </div>
+</body>
+</html>

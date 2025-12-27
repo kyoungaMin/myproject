@@ -7,6 +7,11 @@
     "exa": {
       "type": "http",
       "url": "https://mcp.exa.ai"
+    },
+    "canva": {
+      "type": "http",
+      "url": "https://mcp.canva.com/mcp",
+      "description": "Canva MCP server - 20 powerful design tools for AI-powered design creation, discovery, and export"
     }
   }
 }
